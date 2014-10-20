@@ -15,7 +15,7 @@ def parse_file():
 
 def parse_article(element):
     article_data = {}
-    docid_string = element.find("p", text=re.compile("Document"))
+    article_data["doc_id"] = element.find("p", text=re.compile("Document")).contents[0].strip("Document ")
     # do a regex to find the actual OKLD.... string; add to dictionary
     article_data["headline"] = element.find("div", id="hd").contents[0].contents[0]
     # text of article is after "all rights reserved" and before the Document ID

@@ -21,10 +21,12 @@ def parse_article(element):
     article_data = {}
     article_data["doc_id"] = element.find("p", text=re.compile("Document")).contents[0].strip("Document ")
     article_data["headline"] = element.find("div", id="hd").contents[0].contents[0]
-    rights_tag = element.find("div", text=re.compile("All rights reserved"))
     date = element.find("div", text=re.compile("The Oakland Tribune")).previous_element
     article_data["date"] = parse(date)
+    wordcountstring = element.find("div", text=re.compile("The Oakland Tribune")).previous_sibling.previous_sibling.contents[0]
+    article_data["wordcount"] = int(wordcountstring.strip(" words"))
     article_text = ""
+    rights_tag = element.find("div", text=re.compile("All rights reserved"))
     for paragraph in rights_tag.next_element.next_element.next_siblings:
         # while "Document OKLD" not in paragraph
         article_text = article_text + repr(paragraph)

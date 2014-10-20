@@ -3,6 +3,7 @@
 import re
 from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
+from dateutil.parser import parse
 
 def parse_file():
     file_path = path.relpath("../../Documents/factiva/62-articles.htm")
@@ -21,8 +22,9 @@ def parse_article(element):
     article_data["doc_id"] = element.find("p", text=re.compile("Document")).contents[0].strip("Document ")
     article_data["headline"] = element.find("div", id="hd").contents[0].contents[0]
     rights_tag = element.find("div", text=re.compile("All rights reserved"))
+    date = element.find("div", text=re.compile("The Oakland Tribune")).previous_element
+    article_data["date"] = parse(date)
     article_text = ""
-    article_data["date"] = element.find("div", text=re.compile("The Oakland Tribune")).previous_element
     for paragraph in rights_tag.next_element.next_element.next_siblings:
         # while "Document OKLD" not in paragraph
         article_text = article_text + repr(paragraph)

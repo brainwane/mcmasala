@@ -2,16 +2,18 @@
 
 import re
 from bs4 import BeautifulSoup
+from os import path
 
 def parse_file():
-    with open("../../Documents/62-articles.htm") as f:
+    file_path = path.relpath("../../Documents/factiva/62-articles.htm")
+    with open(file_path) as f:
         cols = f.read()
     soup = BeautifulSoup(cols)
     articles = soup.find_all("div", attrs={"class": "article"})
     article_list = []
     for article in articles:
         article_list.append(parse_article(article))
-    return article_dict # JSON time!
+    return article_list # JSON time!
 
 def parse_article(element):
     article_data = {}

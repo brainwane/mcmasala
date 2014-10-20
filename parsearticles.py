@@ -19,10 +19,10 @@ def parse_file():
 def parse_article(element):
     article_data = {}
     article_data["doc_id"] = element.find("p", text=re.compile("Document")).contents[0].strip("Document ")
-    # do a regex to find the actual OKLD.... string; add to dictionary
     article_data["headline"] = element.find("div", id="hd").contents[0].contents[0]
     rights_tag = element.find("div", text=re.compile("All rights reserved"))
     article_text = ""
+    article_data["date"] = element.find("div", text=re.compile("The Oakland Tribune")).previous_element
     for paragraph in rights_tag.next_element.next_element.next_siblings:
         # while "Document OKLD" not in paragraph
         article_text = article_text + repr(paragraph)

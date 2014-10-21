@@ -6,6 +6,7 @@
 import re
 import json
 import io
+import codecs
 from os import path
 from dateutil.parser import parse
 
@@ -31,6 +32,7 @@ def htmlize_story(story):
     pageend = "</body></html>"
     output = (pagestart + story["headline"] + title_to_body + hed +
               byline + story_body + footer + pageend)
+    return output, story["doc_id"]
 
 def clean_html(body):
     ''' clean up unnecessary characters in the story body
@@ -39,7 +41,8 @@ def clean_html(body):
 
 def write_page(story_html, slug):
     ''' takes HTML string and writes it to a file '''
-    pass
+    with codecs.open(slug, encoding='utf-8', mode='w') as f:
+        f.write(story_html)
 
 if __name__ == "__main__":
-    pass
+    write_page('hello there', 'slugy')

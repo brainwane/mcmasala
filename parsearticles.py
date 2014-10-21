@@ -34,19 +34,21 @@ def parse_file(filename, article_list):
 
 def parse_article(element):
     article_data = {}
-    article_data["doc_id"] = element.find("p", text=re.compile("Document")).contents[0].strip("Document ")
-    article_data["headline"] = element.find("div", id="hd").contents[0].contents[0]
+    article_data["doc_id"] = element.find("p", text=re.compile("Document")).text.strip("Document ")
+    article_data["headline"] = element.find("div", id = "hd").text.strip("\n")
     # instead of contents[0] try .text or .string
-    if element.find("div", text=re.compile("The Oakland Tribune")):
-        # consider setting that element.find to a variable -- if not None, look at its .previous_element
-        article_data["date"] = element.find("div", text=re.compile("The Oakland Tribune")).previous_element
-        wordcountstring = element.find("div", text=re.compile("The Oakland Tribune")).previous_sibling.previous_sibling.contents[0]
+    trib = element.find("div", text=re.compile("The Oakland Tribune"))
+    if trib:
+        article_data["date"] = trib.previous_element
+        wordcountstring = trib.previous_sibling.previous_sibling.text
         article_data["wordcount"] = int(wordcountstring.strip(" words"))
     article_text = ""
-    if element.find("div", text=re.compile("All rights reserved")):
-        rights_tag = element.find("div", text=re.compile("All rights reserved"))
-        # assign it to rights_tag earlier. can use    if rights_tag
+    rights_tag = element.find("div", text=re.compile("All rights reserved"))
+    if rights_tag:
+#        import pdb; pdb.set_trace()
         for paragraph in rights_tag.next_element.next_element.next_siblings:
+            # this is not working after the switch to Python 3 -- there are now no next siblings
+            # generator yield thing (Python 3)
             # maybe try find_next or find_next_siblings if it is all the <p> tag
             article_text = article_text + repr(paragraph)
             # text of article is after "all rights reserved" and before the Document ID

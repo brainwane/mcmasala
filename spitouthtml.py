@@ -5,7 +5,7 @@
 # and turns them into HTML files.
 
 import codecs
-import parsearticles
+from . import parsearticles
 from os import path
 from dateutil.parser import parse
 
@@ -47,6 +47,6 @@ if __name__ == "__main__":
     article_lists = parsearticles.parse_all_articles(parsearticles.global_file_list)
     for article_list in article_lists:
         for article in article_list:
-            print type(article), article
+            print(type(article), article)
             (html, filename) = htmlize_story(article)
             write_page(html, 'stories/{}'.format(filename))

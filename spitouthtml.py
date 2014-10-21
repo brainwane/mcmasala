@@ -18,7 +18,7 @@ from dateutil.parser import parse
 
 def htmlize_story(story):
     ''' turn the dict into HTML
-    return a giant string '''
+    return a giant string plus a datestring for the filename'''
     pagestart = "<html><head><title>"
     title_to_body = "</title><link rel='stylesheet' href='../style.css'></head><body>"
     hed = "<div class='story'><h2 class='hed'>" + story["headline"]+"</h2>"
@@ -41,7 +41,8 @@ Part of <a href="https://github.com/brainwane/mcmasala">MC Masala</a>
     pageend = "</body></html>"
     output = (pagestart + story["headline"] + title_to_body + hed +
               byline + story_body + footer + navbar + pageend)
-    return output, story["doc_id"]
+    dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
+    return output, dateslug
 
 def clean_html(body):
     ''' clean up unnecessary characters in the story body

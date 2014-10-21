@@ -16,9 +16,11 @@ file_list = [
 "../../Documents/factiva/62-articles.htm",
 "../../Documents/factiva/Factiva-99-articles.htm",
 "../../Documents/factiva/Factiva-30.htm"]
-article_list = []
 
-def parse_file(filename):
+global_article_list = None
+
+
+def parse_file(filename, article_list):
     file_path = path.relpath(filename)
     with open(file_path) as f:
         newsfile = f.read()
@@ -27,8 +29,9 @@ def parse_file(filename):
     articles = soup.find_all("div", attrs={"class": "article"})
     for article in articles:
         doc_id = article.find("p", text=re.compile("Document")).contents[0].strip("Document ")
-        if is_unique(doc_id):
+        if is_unique(doc_id, article_list):
             article_list.append(parse_article(article))
+    return article_list
 
 def parse_article(element):
     article_data = {}
@@ -54,7 +57,7 @@ def parse_article(element):
         print(article_data["headline"]+" has no rightstag")
     return article_data
 
-def is_unique(uniqueid):
+def is_unique(uniqueid, article_list):
     '''Checks whether I've already grabbed this article; the archive HTML files overlap.'''
     for item in article_list:
         if item["doc_id"] == uniqueid:
@@ -63,7 +66,7 @@ def is_unique(uniqueid):
 
 if __name__ == "__main__":
     for archivefile in file_list:
-        parse_file(archivefile)
+        global_article_list = parse_file(archivefile, [])
     print(len(article_list))
-    return article_list
+    pass
 

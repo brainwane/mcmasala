@@ -51,7 +51,7 @@ def parse_article(element):
         article_text = article_text.rpartition("<p>Document OKLD")[0]
         article_data["body"] = article_text
     else:
-        print article_data["headline"], "has no rightstag"
+        print(article_data["headline"]+" has no rightstag")
     return article_data
 
 def is_unique(uniqueid):

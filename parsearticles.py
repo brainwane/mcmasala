@@ -1,5 +1,12 @@
 #!/usr/bin/python
 
+# This script takes a list of HTML files of my old newspaper columns
+# and scrapes them using Beautiful Soup. The result is a dictionary
+# containing the columns as structured data: unique doc_id, headline,
+# date, body, and wordcount.
+# TODO: improve BS usage for performance, also pull out pull quotes
+# and "write to her at" end lines.
+
 import re
 import json
 import io
@@ -8,10 +15,10 @@ from os import path
 from dateutil.parser import parse
 
 file_list = [
-"../../Documents/factiva/Factiva-98-articles.htm", # DocID works on this one
-"../../Documents/factiva/62-articles.htm", # DocID works on this one
-"../../Documents/factiva/Factiva-99-articles.htm",  # DocID works on this one
-"../../Documents/factiva/Factiva-30.htm"] # DocID works on this one
+"../../Documents/factiva/Factiva-98-articles.htm",
+"../../Documents/factiva/62-articles.htm",
+"../../Documents/factiva/Factiva-99-articles.htm",
+"../../Documents/factiva/Factiva-30.htm"]
 article_list = []
 
 def parse_file(filename):
@@ -52,6 +59,7 @@ def parse_article(element):
     return article_data
 
 def is_unique(uniqueid):
+    '''Checks whether I've already grabbed this article; the archive HTML files overlap.'''
     for item in article_list:
         if item["doc_id"] == uniqueid:
             return False
@@ -63,4 +71,4 @@ if __name__ == "__main__":
     print len(article_list)
     with io.open("articles.json", "w", encoding = "utf-8") as outfile:
         outfile.write(unicode(json.dumps(article_list, ensure_ascii=False)))
-# JSON time!
+# JSON time! Caution, this does not work right now.

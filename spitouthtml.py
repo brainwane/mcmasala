@@ -19,8 +19,8 @@ from dateutil.parser import parse
 def htmlize_story(story):
     ''' turn the dict into HTML
     return a giant string plus a datestring for the filename'''
-    pagestart = "<html><head><title>"
-    title_to_body = "</title><link rel='stylesheet' href='../style.css'></head><body>"
+    pagestart = "<html><head> <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'> <title>"
+    title_to_body = "</title><link rel='stylesheet' href='../style.css'> </head><body>"
     hed = "<div class='story'><h2 class='hed'>" + story["headline"]+"</h2>"
     byline = ("<p class='byline'>by Sumana Harihareswara, " +
               parse(story["date"]).strftime("%A, %d %B %Y") + "</p>")

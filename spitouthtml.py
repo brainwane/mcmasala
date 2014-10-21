@@ -5,7 +5,7 @@
 # and turns them into HTML files.
 
 import codecs
-from . import parsearticles
+import parsearticles
 from os import path
 from dateutil.parser import parse
 
@@ -19,15 +19,15 @@ from dateutil.parser import parse
 def htmlize_story(story):
     ''' turn the dict into HTML
     return a giant string '''
-    pagestart = "<html><head><title>".encode('utf8')
-    title_to_body = "</title></head><body>".encode('utf8')
-    hed = "<div class='hed'>" + story["headline"]+"</div>".encode('utf8')
+    pagestart = "<html><head><title>"
+    title_to_body = "</title></head><body>"
+    hed = "<div class='hed'>" + story["headline"]+"</div>"
     byline = ("<p class='byline'>by Sumana Harihareswara, " +
-              parse(story["date"]).isoformat() + "</p>").encode('utf8')
-    story_body = "<div class='story'>" + clean_html(story["body"]) + "</div>".encode('utf8')
+              parse(story["date"]).isoformat() + "</p>")
+    story_body = "<div class='story'>" + clean_html(story["body"]) + "</div>"
     footer = ("<div class='footer'" +
               "A <a href='http://harihareswara.net'>Sumana Harihareswara</a> website"
-              + "</div>").encode('utf8')
+              + "</div>")
     pageend = "</body></html>"
     output = (pagestart + story["headline"] + title_to_body + hed +
               byline + story_body + footer + pageend)
@@ -47,6 +47,5 @@ if __name__ == "__main__":
     article_lists = parsearticles.parse_all_articles(parsearticles.global_file_list)
     for article_list in article_lists:
         for article in article_list:
-            print(type(article), article)
             (html, filename) = htmlize_story(article)
             write_page(html, 'stories/{}'.format(filename))

@@ -20,12 +20,12 @@ def htmlize_story(story):
     ''' turn the dict into HTML
     return a giant string '''
     pagestart = "<html><head><title>"
-    title_to_body = "</title></head><body>"
-    hed = "<div class='hed'>" + story["headline"]+"</div>"
+    title_to_body = "</title><link rel='stylesheet' href='style.css'></head><body>"
+    hed = "<h2 class='hed'>" + story["headline"]+"</h2>"
     byline = ("<p class='byline'>by Sumana Harihareswara, " +
-              parse(story["date"]).isoformat() + "</p>")
+              parse(story["date"]).strftime("%A, %d %B %Y") + "</p>")
     story_body = "<div class='story'>" + clean_html(story["body"]) + "</div>"
-    footer = ("<div class='footer'" +
+    footer = ("<div class='footer'>" +
               "A <a href='http://harihareswara.net'>Sumana Harihareswara</a> website"
               + "</div>")
     pageend = "</body></html>"

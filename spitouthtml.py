@@ -20,17 +20,27 @@ def htmlize_story(story):
     ''' turn the dict into HTML
     return a giant string '''
     pagestart = "<html><head><title>"
-    title_to_body = "</title><link rel='stylesheet' href='style.css'></head><body>"
-    hed = "<h2 class='hed'>" + story["headline"]+"</h2>"
+    title_to_body = "</title><link rel='stylesheet' href='../style.css'></head><body>"
+    hed = "<div class='story'><h2 class='hed'>" + story["headline"]+"</h2>"
     byline = ("<p class='byline'>by Sumana Harihareswara, " +
               parse(story["date"]).strftime("%A, %d %B %Y") + "</p>")
-    story_body = "<div class='story'>" + clean_html(story["body"]) + "</div>"
+    story_body = "<div class='verbiage'>" + clean_html(story["body"]) + "</div></div>"
     footer = ("<div class='footer'>" +
               "A <a href='http://harihareswara.net'>Sumana Harihareswara</a> website"
               + "</div>")
+    navbar = """<aside class='sidebar'>
+Part of <a href="https://github.com/brainwane/mcmasala">MC Masala</a>
+<nav role='navigation'>
+<ul>
+<li><a href="https://github.com/brainwane/mcmasala">Next</a></li>
+<li><a href="https://github.com/brainwane/mcmasala">Previous</a></li>
+<li><a href="../">Go up a level</a></li>
+<ul>
+</nav>
+</aside>"""
     pageend = "</body></html>"
     output = (pagestart + story["headline"] + title_to_body + hed +
-              byline + story_body + footer + pageend)
+              byline + story_body + footer + navbar + pageend)
     return output, story["doc_id"]
 
 def clean_html(body):

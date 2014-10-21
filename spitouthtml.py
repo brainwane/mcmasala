@@ -1,12 +1,11 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # This script takes a Python dictionary of newspaper stories
 # and turns them into HTML files.
 
-import re
-import json
-import io
 import codecs
+import parsearticles
 from os import path
 from dateutil.parser import parse
 
@@ -20,15 +19,15 @@ from dateutil.parser import parse
 def htmlize_story(story):
     ''' turn the dict into HTML
     return a giant string '''
-    pagestart = "<html><head><title>"
-    title_to_body = "</title></head><body>"
-    hed = "<div class='hed'>" + story["headline"]+"</div>"
+    pagestart = "<html><head><title>".encode('utf8')
+    title_to_body = "</title></head><body>".encode('utf8')
+    hed = "<div class='hed'>" + story["headline"]+"</div>".encode('utf8')
     byline = ("<p class='byline'>by Sumana Harihareswara, " +
-              parse(story["date"]).isoformat() + "</p>")
-    story_body = "<div class='story'>" + clean_html(story["body"]) + "</div>"
+              parse(story["date"]).isoformat() + "</p>").encode('utf8')
+    story_body = "<div class='story'>" + clean_html(story["body"]) + "</div>".encode('utf8')
     footer = ("<div class='footer'" +
               "A <a href='http://harihareswara.net'>Sumana Harihareswara</a> website"
-              + "</div>")
+              + "</div>").encode('utf8')
     pageend = "</body></html>"
     output = (pagestart + story["headline"] + title_to_body + hed +
               byline + story_body + footer + pageend)
@@ -45,4 +44,9 @@ def write_page(story_html, slug):
         f.write(story_html)
 
 if __name__ == "__main__":
-    write_page('hello there', 'slugy')
+    article_lists = parsearticles.parse_all_articles(parsearticles.global_file_list)
+    for article_list in article_lists:
+        for article in article_list:
+            print type(article), article
+            (html, filename) = htmlize_story(article)
+            write_page(html, 'stories/{}'.format(filename))

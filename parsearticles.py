@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 # This script takes a list of HTML files of my old newspaper columns
 # and scrapes them using Beautiful Soup. The result is a dictionary
@@ -11,13 +12,11 @@ import re
 from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
 
-file_list = [
+global_file_list = [
 "../../Documents/factiva/Factiva-98-articles.htm",
 "../../Documents/factiva/62-articles.htm",
 "../../Documents/factiva/Factiva-99-articles.htm",
 "../../Documents/factiva/Factiva-30.htm"]
-
-global_article_list = None
 
 
 def parse_file(filename, article_list):
@@ -64,9 +63,9 @@ def is_unique(uniqueid, article_list):
             return False
     return True
 
+def parse_all_articles(file_list):
+    return [parse_file(archivefile, []) for archivefile in file_list]
+
 if __name__ == "__main__":
-    for archivefile in file_list:
-        global_article_list = parse_file(archivefile, [])
-    print(len(article_list))
-    pass
+    parse_all_articles(global_file_list)
 

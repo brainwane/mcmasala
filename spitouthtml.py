@@ -24,7 +24,7 @@ def htmlize_story(story):
     hed = "<div class='story'><h2 class='hed'>" + story["headline"]+"</h2>"
     byline = ("<p class='byline'>by Sumana Harihareswara, " +
               parse(story["date"]).strftime("%A, %d %B %Y") + "</p>")
-    story_body = "<div class='verbiage'>" + clean_html(story["body"]) + "</div></div>"
+    story_body = "<div class='verbiage'>" + story["body"] + "</div></div>"
     footer = ("<div class='footer'>" +
               "A <a href='http://harihareswara.net'>Sumana Harihareswara</a> website"
               + "</div>")
@@ -43,11 +43,6 @@ Part of <a href="https://github.com/brainwane/mcmasala">MC Masala</a>
               byline + story_body + footer + navbar + pageend)
     dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
     return output, dateslug
-
-def clean_html(body):
-    ''' clean up unnecessary characters in the story body
-    return a big string of HTML and a slug string'''
-    return body
 
 def write_page(story_html, slug):
     ''' takes HTML string and writes it to a file '''

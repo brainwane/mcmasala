@@ -47,6 +47,7 @@ def parse_article(element):
         for paragraph in rights_tag.next_element.next_element.next_siblings:
             article_text = article_text + repr(paragraph)
             # text of article is after "all rights reserved" and before the Document ID
+            article_text = article_text.replace("</p>\'\\n\'", "</p>")
         article_text = article_text.rpartition("<p>Document OKLD")[0]
         article_data["body"] = article_text
     else:

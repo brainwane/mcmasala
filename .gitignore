@@ -2,3 +2,5 @@
 *.pyc
 *.txt~
 *.md~
+*.json
+useful-python.txt

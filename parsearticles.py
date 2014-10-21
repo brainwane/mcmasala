@@ -24,7 +24,7 @@ def parse_file(filename, article_list):
     with open(file_path) as f:
         newsfile = f.read()
     cols = UnicodeDammit.detwingle(newsfile)
-    soup = BeautifulSoup(cols)
+    soup = BeautifulSoup(cols, "html5lib")
     articles = soup.find_all("div", attrs={"class": "article"})
     for article in articles:
         doc_id = article.find("p", text=re.compile("Document")).contents[0].strip("Document ")
@@ -36,7 +36,6 @@ def parse_article(element):
     article_data = {}
     article_data["doc_id"] = element.find("p", text=re.compile("Document")).text.strip("Document ")
     article_data["headline"] = element.find("div", id = "hd").text.strip("\n")
-    # instead of contents[0] try .text or .string
     trib = element.find("div", text=re.compile("The Oakland Tribune"))
     if trib:
         article_data["date"] = trib.previous_element
@@ -45,11 +44,7 @@ def parse_article(element):
     article_text = ""
     rights_tag = element.find("div", text=re.compile("All rights reserved"))
     if rights_tag:
-#        import pdb; pdb.set_trace()
         for paragraph in rights_tag.next_element.next_element.next_siblings:
-            # this is not working after the switch to Python 3 -- there are now no next siblings
-            # generator yield thing (Python 3)
-            # maybe try find_next or find_next_siblings if it is all the <p> tag
             article_text = article_text + repr(paragraph)
             # text of article is after "all rights reserved" and before the Document ID
         article_text = article_text.rpartition("<p>Document OKLD")[0]

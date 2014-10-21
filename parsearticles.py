@@ -8,10 +8,10 @@ from os import path
 from dateutil.parser import parse
 
 file_list = [
-"../../Documents/factiva/Factiva-98-articles.htm", 
-"../../Documents/factiva/62-articles.htm", 
-"../../Documents/factiva/Factiva-99-articles.htm", 
-"../../Documents/factiva/Factiva-30.htm"]
+"../../Documents/factiva/Factiva-98-articles.htm", # DocID works on this one
+"../../Documents/factiva/62-articles.htm", # DocID works on this one
+"../../Documents/factiva/Factiva-99-articles.htm",  # DocID works on this one
+"../../Documents/factiva/Factiva-30.htm"] # DocID works on this one
 article_list = []
 
 def parse_file(filename):
@@ -22,7 +22,9 @@ def parse_file(filename):
     soup = BeautifulSoup(cols)
     articles = soup.find_all("div", attrs={"class": "article"})
     for article in articles:
-        article_list.append(parse_article(article))
+        doc_id = article.find("p", text=re.compile("Document")).contents[0].strip("Document ")
+        if is_unique(doc_id):
+            article_list.append(parse_article(article))
 
 def parse_article(element):
     article_data = {}
@@ -48,6 +50,12 @@ def parse_article(element):
     else:
         print article_data["headline"], "has no rightstag"
     return article_data
+
+def is_unique(uniqueid):
+    for item in article_list:
+        if item["doc_id"] == uniqueid:
+            return False
+    return True
 
 if __name__ == "__main__":
     for archivefile in file_list:

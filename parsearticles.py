@@ -2,17 +2,14 @@
 
 # This script takes a list of HTML files of my old newspaper columns
 # and scrapes them using Beautiful Soup. The result is a dictionary
-# containing the columns as structured data: unique doc_id, headline,
+# containing the stories as structured data: unique doc_id, headline,
 # date, body, and wordcount.
 # TODO: improve BS usage for performance, also pull out pull quotes
 # and "write to her at" end lines.
 
 import re
-import json
-import io
 from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
-from dateutil.parser import parse
 
 file_list = [
 "../../Documents/factiva/Factiva-98-articles.htm",
@@ -40,8 +37,7 @@ def parse_article(element):
     # instead of contents[0] try .text or .string
     if element.find("div", text=re.compile("The Oakland Tribune")):
         # consider setting that element.find to a variable -- if not None, look at its .previous_element
-        date = element.find("div", text=re.compile("The Oakland Tribune")).previous_element
-        article_data["date"] = parse(date).isoformat()
+        article_data["date"] = element.find("div", text=re.compile("The Oakland Tribune")).previous_element
         wordcountstring = element.find("div", text=re.compile("The Oakland Tribune")).previous_sibling.previous_sibling.contents[0]
         article_data["wordcount"] = int(wordcountstring.strip(" words"))
     article_text = ""
@@ -68,7 +64,6 @@ def is_unique(uniqueid):
 if __name__ == "__main__":
     for archivefile in file_list:
         parse_file(archivefile)
-    print len(article_list)
-    with io.open("articles.json", "w", encoding = "utf-8") as outfile:
-        outfile.write(unicode(json.dumps(article_list, ensure_ascii=False)))
-# JSON time! Caution, this does not work right now.
+    print(len(article_list))
+    return article_list
+

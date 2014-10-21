@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import re
+import json
+import io
 from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
 from dateutil.parser import parse
@@ -30,7 +32,7 @@ def parse_article(element):
     if element.find("div", text=re.compile("The Oakland Tribune")):
         # consider setting that element.find to a variable -- if not None, look at its .previous_element
         date = element.find("div", text=re.compile("The Oakland Tribune")).previous_element
-        article_data["date"] = parse(date)
+        article_data["date"] = parse(date).isoformat()
         wordcountstring = element.find("div", text=re.compile("The Oakland Tribune")).previous_sibling.previous_sibling.contents[0]
         article_data["wordcount"] = int(wordcountstring.strip(" words"))
     article_text = ""
@@ -50,4 +52,7 @@ def parse_article(element):
 if __name__ == "__main__":
     for archivefile in file_list:
         parse_file(archivefile)
-    print len(article_list) # JSON time!
+    print len(article_list)
+    with io.open("articles.json", "w", encoding = "utf-8") as outfile:
+        outfile.write(unicode(json.dumps(article_list, ensure_ascii=False)))
+# JSON time!

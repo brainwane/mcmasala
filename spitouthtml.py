@@ -19,28 +19,31 @@ from dateutil.parser import parse
 
 
 class HtmlOutput(object):
-    def headline(self, story):
-        return story["headline"]
+    def __init__(self, story):
+        self.story = story
 
-    def pubdate(self, story):
-        return parse(story["date"]).strftime("%A, %d %B %Y")
+    def headline(self):
+        return self.story["headline"]
 
-    def dateslug(self, story):
-        return parse(story["date"]).strftime("%d-%B-%Y") + ".html"
+    def pubdate(self):
+        return parse(self.story["date"]).strftime("%A, %d %B %Y")
 
-    def verbiage(self, story):
-        return story["body"]
+    def verbiage(self):
+        return self.story["body"]
 
+# def next
+# def previous
+#      using the headline/date from the "index"
 
 
 def htmlize_story(story):
     '''use pystache to turn the dict into HTML to output,
     take HTML string and write it to a file '''
-    output = HtmlOutput()
+    output = HtmlOutput(story)
     dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
     renderer = pystache.Renderer()
     with codecs.open(dateslug, encoding='utf-8', mode='w') as f:
-        f.write(renderer.render(output, story))
+        f.write(renderer.render(output))
 
 if __name__ == "__main__":
     article_lists = parsearticles.parse_all_articles(parsearticles.global_file_list)

@@ -3,4 +3,5 @@
 *.txt~
 *.md~
 *.json
+*.mustache~
 useful-python.txt

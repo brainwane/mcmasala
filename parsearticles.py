@@ -67,3 +67,10 @@ def parse_all_articles(file_list):
 if __name__ == "__main__":
     parse_all_articles(global_file_list)
 
+
+
+# flatten this into 1 output list (not a list of lists)
+# sort that by date
+# create an "index" (dates and headlines) for use by
+#    index.html page
+#    next/previous part of template

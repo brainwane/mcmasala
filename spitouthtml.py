@@ -6,6 +6,7 @@
 
 import codecs
 import parsearticles
+import pystache
 from os import path
 from dateutil.parser import parse
 
@@ -16,42 +17,36 @@ from dateutil.parser import parse
 # wordcount
 # body
 
-def htmlize_story(story):
-    ''' turn the dict into HTML
-    return a giant string plus a datestring for the filename'''
-    pagestart = "<html><head> <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'> <title>"
-    title_to_body = "</title><link rel='stylesheet' href='../style.css'> </head><body>"
-    hed = "<div class='story'><h2 class='hed'>" + story["headline"]+"</h2>"
-    byline = ("<p class='byline'>by Sumana Harihareswara, " +
-              parse(story["date"]).strftime("%A, %d %B %Y") + "</p>")
-    story_body = "<div class='verbiage'>" + story["body"] + "</div></div>"
-    footer = ("<div class='footer'>" +
-              "A <a href='http://harihareswara.net'>Sumana Harihareswara</a> website"
-              + "</div>")
-    navbar = """<aside class='sidebar'>
-Part of <a href="https://github.com/brainwane/mcmasala">MC Masala</a>
-<nav role='navigation'>
-<ul>
-<li><a href="https://github.com/brainwane/mcmasala">Next</a></li>
-<li><a href="https://github.com/brainwane/mcmasala">Previous</a></li>
-<li><a href="../">Go up a level</a></li>
-<ul>
-</nav>
-</aside>"""
-    pageend = "</body></html>"
-    output = (pagestart + story["headline"] + title_to_body + hed +
-              byline + story_body + footer + navbar + pageend)
-    dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
-    return output, dateslug
 
-def write_page(story_html, slug):
-    ''' takes HTML string and writes it to a file '''
-    with codecs.open(slug, encoding='utf-8', mode='w') as f:
-        f.write(story_html)
+class HtmlOutput(object):
+    def __init__(self, story):
+        self.story = story
+
+    def headline(self):
+        return self.story["headline"]
+
+    def pubdate(self):
+        return parse(self.story["date"]).strftime("%A, %d %B %Y")
+
+    def verbiage(self):
+        return self.story["body"]
+
+# def next
+# def previous
+#      using the headline/date from the "index"
+
+
+def htmlize_story(story):
+    '''use pystache to turn the dict into HTML to output,
+    take HTML string and write it to a file '''
+    output = HtmlOutput(story)
+    dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
+    renderer = pystache.Renderer()
+    with codecs.open(dateslug, encoding='utf-8', mode='w') as f:
+        f.write(renderer.render(output))
 
 if __name__ == "__main__":
     article_lists = parsearticles.parse_all_articles(parsearticles.global_file_list)
     for article_list in article_lists:
         for article in article_list:
-            (html, filename) = htmlize_story(article)
-            write_page(html, 'stories/{}'.format(filename))
+            htmlize_story(article)

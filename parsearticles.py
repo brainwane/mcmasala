@@ -11,6 +11,7 @@
 import re
 from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
+from dateutil.parser import parse
 
 global_file_list = [
 "../../Documents/factiva/Factiva-98-articles.htm",
@@ -18,19 +19,6 @@ global_file_list = [
 "../../Documents/factiva/Factiva-99-articles.htm",
 "../../Documents/factiva/Factiva-30.htm"]
 
-
-def parse_file(filename, article_list):
-    file_path = path.relpath(filename)
-    with open(file_path) as f:
-        newsfile = f.read()
-    cols = UnicodeDammit.detwingle(newsfile)
-    soup = BeautifulSoup(cols, "html5lib")
-    articles = soup.find_all("div", attrs={"class": "article"})
-    for article in articles:
-        doc_id = article.find("p", text=re.compile("Document")).contents[0].strip("Document ")
-        if is_unique(doc_id, article_list):
-            article_list.append(parse_article(article))
-    return article_list
 
 def parse_article(element):
     article_data = {}
@@ -54,6 +42,25 @@ def parse_article(element):
         print(article_data["headline"]+" has no rightstag")
     return article_data
 
+def parse_file(filename, article_list):
+    '''Returns a date-sorted list of dictionaries, and a date-sorted list
+    of dates-and-headlines dicts.'''
+    file_path = path.relpath(filename)
+    with open(file_path) as f:
+        newsfile = f.read()
+    cols = UnicodeDammit.detwingle(newsfile)
+    soup = BeautifulSoup(cols, "html5lib")
+    articles = soup.find_all("div", attrs={"class": "article"})
+    for article in articles:
+        doc_id = article.find("p", text=re.compile("Document")).contents[0].strip("Document ")
+        if is_unique(doc_id, article_list):
+            article_list.append(parse_article(article))
+    article_list.sort(key=lambda k: parse(k["date"]))
+    index = [{k:v for (k,v) in story.items() if ("date" in k) or ("headline" in k)} for story in article_list]
+    return (article_list, index)
+#    return article_list
+
+
 def is_unique(uniqueid, article_list):
     '''Checks whether I've already grabbed this article; the archive HTML files overlap.'''
     for item in article_list:
@@ -62,8 +69,8 @@ def is_unique(uniqueid, article_list):
     return True
 
 def parse_all_articles(file_list):
-    return [parse_file(archivefile, []) for archivefile in file_list]
+    return [parse_file(archivefile, [])[0] for archivefile in file_list]
+#    return [parse_file(archivefile, []) for archivefile in file_list]
 
 if __name__ == "__main__":
     parse_all_articles(global_file_list)
-

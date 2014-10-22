@@ -50,3 +50,4 @@ if __name__ == "__main__":
     for article_list in article_lists:
         for article in article_list:
             htmlize_story(article)
+

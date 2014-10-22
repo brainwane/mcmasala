@@ -14,10 +14,11 @@ from os import path
 from dateutil.parser import parse
 
 global_file_list = [
-"../../Documents/factiva/Factiva-98-articles.htm",
-"../../Documents/factiva/62-articles.htm",
-"../../Documents/factiva/Factiva-99-articles.htm",
-"../../Documents/factiva/Factiva-30.htm"]
+# "../../Documents/factiva/Factiva-98-articles.htm",
+"../../Documents/factiva/62-articles.htm"
+# "../../Documents/factiva/Factiva-99-articles.htm",
+# "../../Documents/factiva/Factiva-30.htm"
+]
 
 
 def parse_article(element):

@@ -31,15 +31,11 @@ class IndexOutput(object):
     #         yield parse(self.story["date"]).strftime("%A, %d %B %Y")
 
     def stories(self):
-        x = ""
+        toc = ""
         for story in self.article_index:
             dateURL = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
             x += '<li><a href="' + dateURL + '">' + story["headline"] + " " + parse(story["date"]).strftime("%A, %d %B %Y") + "</a></li>"
-        return x
-
-# def next
-# def previous
-#      using the headline/date from the "index"
+        return toc
 
 
 def htmlize_article_index(article_index):

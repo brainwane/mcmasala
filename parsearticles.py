@@ -13,12 +13,7 @@ from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
 from dateutil.parser import parse
 
-global_file_list = [
-# "../../Documents/factiva/Factiva-98-articles.htm",
-"../../Documents/factiva/62-articles.htm"
-# "../../Documents/factiva/Factiva-99-articles.htm",
-# "../../Documents/factiva/Factiva-30.htm"
-]
+ARCHIVEFILE = "../../Documents/factiva/all-articles.htm"
 
 
 def parse_article(element):
@@ -59,8 +54,6 @@ def parse_file(filename, article_list):
     article_list.sort(key=lambda k: parse(k["date"]))
     index = [{k:v for (k,v) in story.items() if ("date" in k) or ("headline" in k)} for story in article_list]
     return (article_list, index)
-#    return article_list
-
 
 def is_unique(uniqueid, article_list):
     '''Checks whether I've already grabbed this article; the archive HTML files overlap.'''
@@ -69,9 +62,5 @@ def is_unique(uniqueid, article_list):
             return False
     return True
 
-def parse_all_articles(file_list):
-    # return [parse_file(archivefile, [])[0] for archivefile in file_list]
-   return [parse_file(archivefile, []) for archivefile in file_list]
-
 if __name__ == "__main__":
-    parse_all_articles(global_file_list)
+    parse_file(ARCHIVEFILE, [])

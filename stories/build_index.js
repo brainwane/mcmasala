@@ -13,9 +13,9 @@ fs = require('fs');
 var idx = lunr(function () {
     this.field('headline', { boost: 10 }); 
     this.field('body');
-    this.ref('doc_id');
+    this.field('doc_id');
     this.field('wordcount');
-    this.field('date');})
+    this.ref('date');})
 
 fs.readFile('data.json', function (err, data) {
     if (err) {

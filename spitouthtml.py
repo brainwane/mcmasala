@@ -46,8 +46,7 @@ def htmlize_story(story):
         f.write(renderer.render(output))
 
 if __name__ == "__main__":
-    article_lists = parsearticles.parse_all_articles(parsearticles.global_file_list)
-    for article_list in article_lists:
-        for article in article_list:
-            htmlize_story(article)
+    article_list = parsearticles.parse_file(parsearticles.ARCHIVEFILE, [])[0]
+    for article in article_list:
+        htmlize_story(article)
 

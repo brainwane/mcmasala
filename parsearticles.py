@@ -13,18 +13,13 @@ from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
 from dateutil.parser import parse
 
-global_file_list = [
-# "../../Documents/factiva/Factiva-98-articles.htm",
-"../../Documents/factiva/62-articles.htm"
-# "../../Documents/factiva/Factiva-99-articles.htm",
-# "../../Documents/factiva/Factiva-30.htm"
-]
+ARCHIVEFILE = "../../Documents/factiva/all-articles.htm"
 
 
 def parse_article(element):
     article_data = {}
     article_data["doc_id"] = element.find("p", text=re.compile("Document")).text.strip("Document ")
-    article_data["headline"] = element.find("div", id = "hd").text.strip("\n")
+    article_data["headline"] = element.find("div", id = "hd").text.strip("\n").rstrip()
     trib = element.find("div", text=re.compile("The Oakland Tribune"))
     if trib:
         article_data["date"] = trib.previous_element
@@ -53,25 +48,19 @@ def parse_file(filename, article_list):
     soup = BeautifulSoup(cols, "html5lib")
     articles = soup.find_all("div", attrs={"class": "article"})
     for article in articles:
-        doc_id = article.find("p", text=re.compile("Document")).contents[0].strip("Document ")
-        if is_unique(doc_id, article_list):
+        headline = article.find("div", id = "hd").text.strip("\n").rstrip()
+        if is_unique(headline, article_list):
             article_list.append(parse_article(article))
     article_list.sort(key=lambda k: parse(k["date"]))
     index = [{k:v for (k,v) in story.items() if ("date" in k) or ("headline" in k)} for story in article_list]
     return (article_list, index)
-#    return article_list
 
-
-def is_unique(uniqueid, article_list):
+def is_unique(headline, article_list):
     '''Checks whether I've already grabbed this article; the archive HTML files overlap.'''
     for item in article_list:
-        if item["doc_id"] == uniqueid:
+        if item["headline"] == headline:
             return False
     return True
 
-def parse_all_articles(file_list):
-    return [parse_file(archivefile, [])[0] for archivefile in file_list]
-#    return [parse_file(archivefile, []) for archivefile in file_list]
-
 if __name__ == "__main__":
-    parse_all_articles(global_file_list)
+    parse_file(ARCHIVEFILE, [])

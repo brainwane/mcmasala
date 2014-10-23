@@ -29,6 +29,11 @@ h2 {
 .verbiage {
     text-align:justify;
 }
+.storylist {
+    text-align:left;
+    padding: 20px;
+    margin-right: 10px;
+}
 .sidebar {
     width:196px;
     position:absolute;

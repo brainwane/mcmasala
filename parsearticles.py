@@ -70,8 +70,8 @@ def is_unique(uniqueid, article_list):
     return True
 
 def parse_all_articles(file_list):
-    return [parse_file(archivefile, [])[0] for archivefile in file_list]
-#    return [parse_file(archivefile, []) for archivefile in file_list]
+    # return [parse_file(archivefile, [])[0] for archivefile in file_list]
+   return [parse_file(archivefile, []) for archivefile in file_list]
 
 if __name__ == "__main__":
     parse_all_articles(global_file_list)

@@ -22,15 +22,9 @@ class IndexOutput(object):
     def __init__(self, article_index):
         self.article_index = article_index
 
-    # def headline(self):
-    #     for story in self.article_list:
-    #         yield story["headline"]
-
-    # def date(self):
-    #     for story in self.article_list:
-    #         yield parse(self.story["date"]).strftime("%A, %d %B %Y")
-
     def stories(self):
+        # This would be better as a Pystache partial or
+        # iteration if I could figure that out.
         toc = ""
         for story in self.article_index:
             dateURL = parse(story["date"]).strftime("%d-%B-%Y") + ".html"

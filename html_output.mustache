@@ -32,26 +32,37 @@ Part of <a href="https://github.com/brainwane/mcmasala">MC Masala</a>
 
 <script src="lunr.min.js"></script>
 
-<script>idx = lunr.Index.load(the_index)</script>
+<script>idx = lunr.Index.load(the_index);</script>
 
 <script>
-function lunrsearch(searchstring) {
-   return idx.search(searchstring);
-};
+function lunrsearch(query) {
+    var result = idx.search(query);
+    if (result.length !== 0) {
+	var formatted_result = "<strong>Results</strong>";
+	for (var i = 0; i < result.length; i++) {
+
+	    var pubdate = result[i]['ref'];
+	    formatted_result += "<br>" + pubdate;
+	}
+
+	document.getElementById('searchResults').innerHTML = formatted_result;
+    }
+	else {
+	    document.getElementById('searchResults').innerHTML = "<p>No results</p>";
+	}
+    }
 </script>
 
 <div id="search">
 
-  <form onsubmit="lunrsearch" method="get">
+  <form onsubmit="lunrsearch()">
     <input type="text" id="search-query" name="q" placeholder="Search" autocomplete="off">
   </form>
 </div>
 </p>
 <p>
-<section id="search-results" style="display: none;">
+<section id="searchResults">
   <p>Search results</p>
-  <div class="entries">
-  </div>
 </section>
 </p>
 

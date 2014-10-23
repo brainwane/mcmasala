@@ -33,7 +33,8 @@ class IndexOutput(object):
     def stories(self):
         x = ""
         for story in self.article_index:
-            x += "<li>" + story["headline"] + " " + parse(story["date"]).strftime("%A, %d %B %Y") + "</li>"
+            dateURL = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
+            x += '<li><a href="' + dateURL + '">' + story["headline"] + " " + parse(story["date"]).strftime("%A, %d %B %Y") + "</a></li>"
         return x
 
 # def next
@@ -45,12 +46,11 @@ def htmlize_article_index(article_index):
     '''use pystache to turn the list into HTML to output,
     take HTML string and write it to a file '''
     output = IndexOutput(article_index)
-#    dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
     renderer = pystache.Renderer()
     with codecs.open("index.html", encoding='utf-8', mode='w') as f:
         f.write(renderer.render(output))
 
 if __name__ == "__main__":
-    article_index = parsearticles.parse_all_articles(parsearticles.global_file_list)[1]
-    htmlize_index(article_index)
+    article_index = parsearticles.parse_file(parsearticles.ARCHIVEFILE, [])[1]
+    htmlize_article_index(article_index)
 

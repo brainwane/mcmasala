@@ -28,7 +28,7 @@ class IndexOutput(object):
         toc = ""
         for story in self.article_index:
             dateURL = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
-            x += '<li><a href="' + dateURL + '">' + story["headline"] + " " + parse(story["date"]).strftime("%A, %d %B %Y") + "</a></li>"
+            toc += '<li><a href="' + dateURL + '">' + story["headline"] + " " + parse(story["date"]).strftime("%A, %d %B %Y") + "</a></li>"
         return toc
 
 

@@ -24,38 +24,17 @@ Part of <a href="https://github.com/brainwane/mcmasala">MC Masala</a>
 <ul>
 </nav>
 </aside>
-<p>
+
 <script src="search.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="index.js"></script>
-</p>
-<p>
-
 <script src="lunr.min.js"></script>
+<script src="pagesearch.js"></script>
 
-<script>idx = lunr.Index.load(the_index);</script>
-
-<script>
-function lunrsearch(query) {
-    var result = idx.search(query);
-    if (result.length !== 0) {
-	var formatted_result = "<strong>Results</strong>";
-	for (var i = 0; i < result.length; i++) {
-
-	    var pubdate = result[i]['ref'];
-	    formatted_result += "<br>" + pubdate;
-	}
-
-	document.getElementById('searchResults').innerHTML = formatted_result;
-    }
-	else {
-	    document.getElementById('searchResults').innerHTML = "<p>No results</p>";
-	}
-    }
-</script>
-
+<p></p>
+<p></p>
 <div id="search">
 
-  <form onsubmit="lunrsearch()">
+  <form id="search" onsubmit="lunrsearch()">
     <input type="text" id="search-query" name="q" placeholder="Search" autocomplete="off">
   </form>
 </div>
@@ -65,7 +44,6 @@ function lunrsearch(query) {
   <p>Search results</p>
 </section>
 </p>
-
 
 </body>
 </html>

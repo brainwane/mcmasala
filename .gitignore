@@ -3,6 +3,8 @@
 *.txt~
 *.md~
 *.json
+*.json~
+*.js~
 *.mustache~
 useful-python.txt
 scratch.txt

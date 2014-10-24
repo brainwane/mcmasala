@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # This script takes a Python dictionary of newspaper stories
-# and turns them into HTML files.
+# and turns them into HTML files, including an index.html page.
 
 import codecs
 import parsearticles
@@ -19,8 +19,9 @@ from dateutil.parser import parse
 
 
 class HtmlOutput(object):
-    def __init__(self, story):
+    def __init__(self, story, article_index):
         self.story = story
+        self.article_index = article_index
 
     def headline(self):
         return self.story["headline"]
@@ -36,17 +37,40 @@ class HtmlOutput(object):
 #      using the headline/date from the "index"
 
 
-def htmlize_story(story):
-    '''use pystache to turn the dict into HTML to output,
-    take HTML string and write it to a file '''
-    output = HtmlOutput(story)
+class IndexOutput(object):
+    def __init__(self, article_index):
+        self.article_index = article_index
+
+    def stories(self):
+        # This would be better as a Pystache partial or
+        # iteration if I could figure that out.
+        toc = ""
+        for storydesc in self.article_index:
+            dateURL = parse(storydesc["date"]).strftime("%d-%B-%Y") + ".html"
+            toc += '<li><a href="' + dateURL + '">' + storydesc["headline"] + "</a>, " + parse(storydesc["date"]).strftime("%A, %d %B %Y") + "</li>"
+        return toc
+
+def htmlize_story(story, article_index):
+    '''use pystache to turn each storydict into HTML to output,
+    take HTML string and write it to a file'''
+    storyoutput = HtmlOutput(story, article_index)
     dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
     renderer = pystache.Renderer()
     with codecs.open(dateslug, encoding='utf-8', mode='w') as f:
-        f.write(renderer.render(output))
+        f.write(renderer.render(storyoutput))
+
+def htmlize_article_index(article_index):
+    '''use pystache to turn the list into HTML to output,
+    take HTML string and write it to a file '''
+    indexoutput = IndexOutput(article_index)
+    renderer = pystache.Renderer()
+    with codecs.open("index.html", encoding='utf-8', mode='w') as f:
+        f.write(renderer.render(indexoutput))
+
 
 if __name__ == "__main__":
-    article_list = parsearticles.parse_file(parsearticles.ARCHIVEFILE, [])[0]
+    (article_list, article_index) = parsearticles.parse_file(parsearticles.ARCHIVEFILE, [])
+    htmlize_article_index(article_index)
     for article in article_list:
-        htmlize_story(article)
+        htmlize_story(article, article_index)
 

@@ -10,7 +10,7 @@ function lunrsearch() {
 	var formatted_result = "<strong>Results</strong>";
 	for (var i = 0; i < result.length; i++) {
 	    var pubdate = result[i]['ref'];
-	    formatted_result += "<br>" + pubdate;
+	    formatted_result += '<br><a href="' + pubdate + '.html">' + pubdate + '</a>';
 	}
 	document.getElementById('searchResults').innerHTML = formatted_result;
     }

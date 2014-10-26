@@ -17,5 +17,4 @@ TODO:
 * get Lunr branch in shape, including linking with the text of headlines instead of just dates, and merge
 * get Next/Previous and Up A Level links working
 * improve de-duplication (checking dates and headlines)
-* check for more articles to archive, in more archival files
 * add photo/logo image

@@ -9,8 +9,8 @@ function lunrsearch() {
     if (result.length !== 0) {
 	var formatted_result = "<strong>Results</strong>";
 	for (var i = 0; i < result.length; i++) {
-	    var pubdate = result[i]['ref'];
-	    formatted_result += '<br><a href="' + pubdate + '.html">' + pubdate + '</a>';
+	    var resultlink = result[i]['ref'];
+	    formatted_result += '<br>' + resultlink;
 	}
 	document.getElementById('searchResults').innerHTML = formatted_result;
     }

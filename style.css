@@ -51,6 +51,10 @@ h2 {
     margin-bottom:8px;
     font-weight: normal;
 }
+div#search {
+    padding-left: 30px;
+    font-style: oblique;
+}
 .footer {
     font-weight:bold;
     display:block;

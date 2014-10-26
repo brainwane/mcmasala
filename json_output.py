@@ -21,7 +21,7 @@ def add_date_url(story):
     And convert a datetime object to a wieldier string.'''
     datestring = parse(story["date"]).strftime("%d-%B-%Y")
     story["date"] = datestring
-    urldesc = '<a href="' + datestring +  + '.html">' + story["headline"] + "</a>"
+    urldesc = '<a href="' + datestring  + '.html">' + story["headline"] + "</a>"
     story["url"] = urldesc
     return story
 

@@ -69,7 +69,7 @@ def htmlize_article_index(article_index):
 
 
 if __name__ == "__main__":
-    (article_list, article_index) = parsearticles.parse_file(parsearticles.ARCHIVEFILE, [])
+    (article_list, article_index) = parsearticles.parse_files(parsearticles.ARCHIVEFILES, [])
     htmlize_article_index(article_index)
     for article in article_list:
         htmlize_story(article, article_index)

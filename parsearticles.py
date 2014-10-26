@@ -3,8 +3,7 @@
 
 # This script takes a list of HTML files of my old newspaper columns
 # and scrapes them using Beautiful Soup. The result is a dictionary
-# containing the stories as structured data: unique doc_id, headline,
-# date, body, and wordcount.
+# containing the stories as structured data: headline, date, & body.
 # TODO: improve BS usage for performance, also pull out pull quotes
 # and "write to her at" end lines.
 
@@ -13,8 +12,7 @@ from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
 from dateutil.parser import parse
 
-ARCHIVEFILES = ["../../Documents/mcm-archive/all-articles.htm", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2005-05-26.html", 
+ARCHIVEFILES = ["/home/sumanah/Documents/mcm-archive/leftovers/2005-05-26.html", 
 "/home/sumanah/Documents/mcm-archive/leftovers/2005-07-28.html", 
 "/home/sumanah/Documents/mcm-archive/leftovers/2005-08-04.html", 
 "/home/sumanah/Documents/mcm-archive/leftovers/2005-08-18.html", 
@@ -23,7 +21,8 @@ ARCHIVEFILES = ["../../Documents/mcm-archive/all-articles.htm",
 "/home/sumanah/Documents/mcm-archive/leftovers/2005-11-20.html", 
 "/home/sumanah/Documents/mcm-archive/leftovers/2006-09-10.html", 
 "/home/sumanah/Documents/mcm-archive/leftovers/2007-05-20.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2007-06-10.html"]
+"/home/sumanah/Documents/mcm-archive/leftovers/2007-06-10.html",
+"../../Documents/mcm-archive/all-articles.htm"]
 
 
 
@@ -33,8 +32,7 @@ def parse_archival_article(element):
     article_data = {}
     article_data["headline"] = element.find("div", id = "hd").text.strip("\n").rstrip()
     trib = element.find("div", text=re.compile("The Oakland Tribune"))
-    if trib:
-        article_data["date"] = trib.previous_element
+    article_data["date"] = trib.previous_element
     article_text = ""
     rights_tag = element.find("div", text=re.compile("All rights reserved"))
     if rights_tag:
@@ -50,15 +48,14 @@ def parse_archival_article(element):
 
 
 def parse_leftover_article(soup):
-    '''I also grabbed some additional articles from another site.
-    They don't have the DocIDs or wordcounts.'''
+    '''I also grabbed some additional articles from another site.'''
     article_data = {}
-    postdate = soup.find("div", attrs={"class":"articleDate"})
-    article_data["date"] = repr(postdate)
+    postdate = soup.find("meta", attrs={"property": "pubDate"})["content"]
+    article_data["date"] = repr(postdate)[1:11]  # slicing the date, not time
     article_data["headline"] = soup.find("meta", attrs={"property": "twitter:title"})["content"]
     body = soup.find("div", id = "articleViewerGroup").previous_element.contents
     prose = ""
-    for para in body[3:]:
+    for para in body[3:]:  # Bunch of useless scripts in the first few elements
         prose += repr(para)
     article_data["body"] = prose
     return article_data
@@ -67,10 +64,8 @@ def parse_leftover_article(soup):
 def parse_files(filenames, article_list):
     '''Returns a date-sorted list of dictionaries, and a date-sorted list
     of dates-and-headlines dicts.'''
-    print("running")
     for filename in filenames:
         file_path = path.relpath(filename)
-        print(file_path)
         with open(file_path) as f:
             newsfile = f.read()
         if ".html" in file_path:

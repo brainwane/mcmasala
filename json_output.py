@@ -9,10 +9,8 @@ import parsearticles
 from dateutil.parser import parse
 
 # An individual "article" or "story" is a dictionary with
-# doc_id
 # headline
 # date
-# wordcount
 # body
 
 def date_convert(story):
@@ -27,7 +25,7 @@ def write_json(storylist):
         json.dump(storylist, f, ensure_ascii=False)
 
 if __name__ == "__main__":
-    article_list = parsearticles.parse_all_articles(parsearticles.global_file_list)[0]
+    article_list = parsearticles.parse_files(parsearticles.ARCHIVEFILES, [])[0]
     for story in article_list:
         story = date_convert(story)
     write_json(article_list)

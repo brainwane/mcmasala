@@ -13,8 +13,6 @@ fs = require('fs');
 var idx = lunr(function () {
     this.field('headline', { boost: 10 }); 
     this.field('body');
-    this.field('doc_id');
-    this.field('wordcount');
     this.ref('date');})
 
 fs.readFile('data.json', function (err, data) {

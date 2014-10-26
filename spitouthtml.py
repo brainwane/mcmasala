@@ -11,10 +11,8 @@ from os import path
 from dateutil.parser import parse
 
 # An individual "article" or "story" is a dictionary with
-# doc_id
 # headline
 # date
-# wordcount
 # body
 
 

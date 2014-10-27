@@ -59,6 +59,7 @@ h2 {
     background-color: #eee;
     color: maroon;
     font-weight: bold;
+    font-size:smaller;
 }
 .sidebar ul {
     margin:5px 0 20px 23px;
@@ -66,19 +67,19 @@ h2 {
 .sidebar ul li {
     margin-bottom:8px;
     font-weight: normal;
+    text-decoration: none;
 }
 div#search {
-    padding-left: 30px;
-    padding-top: 5px;
+    padding: 5px 5px 5px 5px;
     font-style: oblique;
     width:196px;
-    position:absolute;
-    top:210px;
-    right:25px;
     border-top: 2px solid #ccc;
+    font-weight: normal;
+    text-decoration: none;
 }
 .footer {
     font-weight:bold;
+    font-size: smaller;
     display:block;
     color:#222222;
     text-align: right;

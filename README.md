@@ -30,5 +30,7 @@ Between April 2005 and August 2007, I [wrote a weekly column called "MC Masala"]
 
 ## To-do
 * improve de-duplication (checking dates and headlines)
+* fix Unicode-type character issues
 * figure out why only including search.min.js and not lunr.min.js causes registration problems
+* treat pullquotes and "write to her at" lines better
 * use Pystache more thoroughly instead of string concatenation & other hacks

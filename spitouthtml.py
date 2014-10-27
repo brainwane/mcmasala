@@ -20,6 +20,8 @@ class HtmlOutput(object):
     def __init__(self, story, article_index):
         self.story = story
         self.article_index = article_index
+        self.dateindex = [x["date"] for x in self.article_index]
+        self.datemarker = self.dateindex.index(self.story["date"])
 
     def headline(self):
         return self.story["headline"]
@@ -30,9 +32,31 @@ class HtmlOutput(object):
     def verbiage(self):
         return self.story["body"]
 
-# def next
-# def previous
-#      using the headline/date from the "index"
+    def nextstoryhed(self):
+        if self.datemarker == len(self.article_index) - 1:
+            return "Last story"
+        else:
+            return "Next: " + self.article_index[self.datemarker+1]["headline"]
+
+    def nextstorydateslug(self):
+        if self.datemarker == len(self.article_index) - 1:
+            return ""
+        else:
+            self.nextdate = self.article_index[self.datemarker+1]["date"]
+            return parse(self.nextdate).strftime("%d-%B-%Y") + ".html"
+
+    def prevstoryhed(self):
+        if self.datemarker == 0:
+            return "First story"
+        else:
+            return "Previous: " + self.article_index[self.datemarker-1]["headline"]
+
+    def prevstorydateslug(self):
+        if self.datemarker == 0:
+            return ""
+        else:
+            self.nextdate = self.article_index[self.datemarker-1]["date"]
+            return parse(self.nextdate).strftime("%d-%B-%Y") + ".html"
 
 
 class IndexOutput(object):

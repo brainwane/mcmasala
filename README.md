@@ -26,7 +26,6 @@ Run:
 Between April 2005 and August 2007, I [wrote a weekly column called "MC Masala"](http://www.harihareswara.net/sumana/2011/02/23/0) for the "Inside Bay Area" section of several papers in the San Francisco Bay Area, including the Oakland Tribune. My work circulated to about a million people, I'm told. In 2011 I made [an abortive attempt](http://www.harihareswara.net/masala) to get the columns online but wasn't a strong programmer and thus gave up on all the fiddly bits. Now I'm at [Hacker School](http://hackerschool.com/) and figured this would be a fun and useful way to learn Beautiful Soup and learn to finagle a search engine.
 
 TODO:
-* get Next/Previous links working
 * improve de-duplication (checking dates and headlines)
 * figure out why only including search.min.js and not lunr.min.js causes registration problems
 * use Pystache more thoroughly instead of string concatenation & other hacks

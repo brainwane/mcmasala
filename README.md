@@ -4,11 +4,11 @@
 
 # MC Masala
 
-This repository is for the website containing Sumana Harihareswara's MC Masala newspaper columns -- a static text site with a simple search engine.
+This repository is for the [website containing Sumana Harihareswara's MC Masala newspaper columns](http://www.harihareswara.net/mcmasala/) -- a static text site with a simple search engine.
 
 ## Site
 
-The site isn't quite up yet but I'll link to it here. This repository will contain the back-end scripts I wrote for munging the text, the CSS for styling the site, and the code and hooks for the search.
+The site is at [harihareswara.net/mcmasala/](http://www.harihareswara.net/mcmasala/). This repository contains the back-end scripts I wrote for munging the text, the CSS for styling the site, and the code and hooks for the search.
 
 Requires:
 

@@ -54,10 +54,10 @@ def parse_leftover_article(soup):
     article_data["date"] = repr(postdate)[1:11]  # slicing the date, not time
     article_data["headline"] = soup.find("meta", attrs={"property": "twitter:title"})["content"]
     body = soup.find("div", id = "articleViewerGroup").previous_element.contents
-    prose = ""
+    prose = "<p>"
     for para in body[3:]:  # Bunch of useless scripts in the first few elements
-        prose += repr(para)
-    article_data["body"] = prose
+        prose += repr(para).strip()
+    article_data["body"] = prose.replace("\\n","").rpartition('<span fd-id="default" fd-type="end"></span>')[0]
     return article_data
 
 

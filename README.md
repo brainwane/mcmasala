@@ -11,12 +11,14 @@ This repository is for the website containing Sumana Harihareswara's MC Masala n
 The site isn't quite up yet but I'll link to it here. This repository will contain the back-end scripts I wrote for munging the text, the CSS for styling the site, and the code and hooks for the search.
 
 Requires:
+
 1. Python 3
 1. Beautiful Soup 4 and Pystache
 1. Nodejs
 1. Lunr.js and jQuery - I used [this plugin](https://github.com/slashdotdash/jekyll-lunr-js-search/blob/master/build/search.min.js) plus lunr.min.js
 
 Run:
+
 1. `python3 json_output.py` to create the data file for Lunr to search
 1. edit the JSON file slightly to turn the list into the value for a dictionary whose value is `"pages"`
 1. `nodejs build_index.js` to create Lunr.js's index file

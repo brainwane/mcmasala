@@ -1,12 +1,28 @@
 body {
     background: #fff;
-    padding:0 250px 100px 0;
+}
+.photo {
+    width: 250px;
+    height: 353px;
+    background-image: url(sumana-with-blue-hair.JPG);
+    top: 42px;
+    left: 10px;
+    position:absolute;
+}
+.main {
     position:relative;
+    padding:0 250px 100px 0;
     width:600px;
     left:50%;
     margin-left:-390px;
     overflow:auto;
     z-index:100;
+}
+header {
+    position: relative;
+    width: 600px;
+    height: 34px;
+    background-image: url(repeated-hodsden-swirls.jpg);
 }
 p {
     padding: 1px 10px 1px 10px;
@@ -37,7 +53,7 @@ h2 {
 .sidebar {
     width:196px;
     position:absolute;
-    top:284px;
+    top:42px;
     right:25px;
     border-top: 4px solid #bbb;
     background-color: #eee;
@@ -53,7 +69,13 @@ h2 {
 }
 div#search {
     padding-left: 30px;
+    padding-top: 5px;
     font-style: oblique;
+    width:196px;
+    position:absolute;
+    top:150px;
+    right:25px;
+    border-top: 2px solid #ccc;
 }
 .footer {
     font-weight:bold;

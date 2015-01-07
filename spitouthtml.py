@@ -27,7 +27,8 @@ class HtmlOutput(object):
         return self.story["headline"]
 
     def pubdate(self):
-        return parse(self.story["date"]).strftime("%A, %d %B %Y")
+        self.dateobject = parse(self.story["date"])
+        return english_from_date(self.dateobject)
 
     def verbiage(self):
         return self.story["body"]
@@ -43,7 +44,8 @@ class HtmlOutput(object):
             return ""
         else:
             self.nextdate = self.article_index[self.datemarker+1]["date"]
-            return parse(self.nextdate).strftime("%d-%B-%Y") + ".html"
+            self.dateobject = parse(self.nextdate)
+            return filename_from_date(self.dateobject)
 
     def prevstoryhed(self):
         if self.datemarker == 0:
@@ -55,8 +57,9 @@ class HtmlOutput(object):
         if self.datemarker == 0:
             return ""
         else:
-            self.nextdate = self.article_index[self.datemarker-1]["date"]
-            return parse(self.nextdate).strftime("%d-%B-%Y") + ".html"
+            self.prevdate = self.article_index[self.datemarker-1]["date"]
+            self.dateobject = parse(self.prevdate)
+            return filename_from_date(self.dateobject)
 
 
 class IndexOutput(object):
@@ -64,13 +67,24 @@ class IndexOutput(object):
         self.article_index = article_index
 
     def stories(self):
+
         # This would be better as a Pystache partial or
         # iteration if I could figure that out.
+
         toc = ""
+
         for storydesc in self.article_index:
-            dateURL = parse(storydesc["date"]).strftime("%d-%B-%Y") + ".html"
-            toc += '<li><a href="' + dateURL + '">' + storydesc["headline"] + "</a>, " + parse(storydesc["date"]).strftime("%A, %d %B %Y") + "</li>"
+            dateobject = parse(storydesc["date"])
+            dateURL = filename_from_date(dateobject)
+            datestring = english_from_date(dateobject)
+            toc += '<li><a href="' + dateURL + '">' + storydesc["headline"] + "</a>, " + datestring + "</li>"
         return toc
+
+def filename_from_date(dateobject):
+    return dateobject.strftime("%d-%B-%Y") + ".html"
+
+def english_from_date(dateobject):
+    return dateobject.strftime("%A, %d %B %Y")
 
 def htmlize_story(story, article_index):
 
@@ -78,8 +92,10 @@ def htmlize_story(story, article_index):
     take HTML string and write it to a file'''
 
     storyoutput = HtmlOutput(story, article_index)
-    dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
+    dateobject = parse(story["date"])
+    dateslug = filename_from_date(dateobject)
     renderer = pystache.Renderer()
+
     with codecs.open(dateslug, encoding='utf-8', mode='w') as f:
         f.write(renderer.render(storyoutput))
 
@@ -90,6 +106,7 @@ def htmlize_article_index(article_index):
 
     indexoutput = IndexOutput(article_index)
     renderer = pystache.Renderer()
+
     with codecs.open("index.html", encoding='utf-8', mode='w') as f:
         f.write(renderer.render(indexoutput))
 

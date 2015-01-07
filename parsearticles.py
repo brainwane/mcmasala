@@ -27,14 +27,17 @@ ARCHIVEFILES = ["/home/sumanah/Documents/mcm-archive/leftovers/2005-05-26.html",
 
 
 def parse_archival_article(element):
+
     ''' I concatenated together a big HTML file of a bunch of my columns.
     This function uses Beautiful Soup to parse it for headline/body/date.'''
+
     article_data = {}
     article_data["headline"] = element.find("div", id = "hd").text.strip("\n").rstrip()
     trib = element.find("div", text=re.compile("The Oakland Tribune"))
     article_data["date"] = trib.previous_element
     article_text = ""
     rights_tag = element.find("div", text=re.compile("All rights reserved"))
+
     if rights_tag:
         for paragraph in rights_tag.next_element.next_element.next_siblings:
             article_text = article_text + repr(paragraph)
@@ -44,11 +47,14 @@ def parse_archival_article(element):
         article_data["body"] = article_text
     else:
         print(article_data["headline"]+" has no rightstag")
+
     return article_data
 
 
 def parse_leftover_article(soup):
+
     '''I also grabbed some additional articles from another site.'''
+
     article_data = {}
     postdate = soup.find("meta", attrs={"property": "pubDate"})["content"]
     article_data["date"] = repr(postdate)[1:11]  # slicing the date, not time
@@ -62,8 +68,10 @@ def parse_leftover_article(soup):
 
 
 def parse_files(filenames, article_list):
+
     '''Returns a date-sorted list of dictionaries, and a date-sorted list
     of dates-and-headlines dicts.'''
+
     for filename in filenames:
         file_path = path.relpath(filename)
         with open(file_path) as f:
@@ -74,6 +82,7 @@ def parse_files(filenames, article_list):
             cols = UnicodeDammit.detwingle(newsfile)
             soup = BeautifulSoup(cols, "html5lib")
         archival_articles = soup.find_all("div", attrs={"class": "article"})
+
         for article in archival_articles:
             headline = article.find("div", id = "hd").text.strip("\n").rstrip()
             if is_unique(headline, article_list):
@@ -82,12 +91,16 @@ def parse_files(filenames, article_list):
             headline = soup.find("meta", attrs={"property": "twitter:title"})["content"]
             if is_unique(headline, article_list):
                 article_list.append(parse_leftover_article(soup))
+
     article_list.sort(key=lambda k: parse(k["date"]))
     index = [{k:v for (k,v) in story.items() if ("date" in k) or ("headline" in k)} for story in article_list]
     return (article_list, index)
 
+
 def is_unique(headline, article_list):
+
     '''Checks whether I've already grabbed this article; the archive HTML files overlap.'''
+
     for item in article_list:
         if item["headline"] == headline:
             return False

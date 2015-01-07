@@ -73,8 +73,10 @@ class IndexOutput(object):
         return toc
 
 def htmlize_story(story, article_index):
+
     '''use pystache to turn each storydict into HTML to output,
     take HTML string and write it to a file'''
+
     storyoutput = HtmlOutput(story, article_index)
     dateslug = parse(story["date"]).strftime("%d-%B-%Y") + ".html"
     renderer = pystache.Renderer()
@@ -82,8 +84,10 @@ def htmlize_story(story, article_index):
         f.write(renderer.render(storyoutput))
 
 def htmlize_article_index(article_index):
+
     '''use pystache to turn the list into HTML to output,
     take HTML string and write it to a file '''
+
     indexoutput = IndexOutput(article_index)
     renderer = pystache.Renderer()
     with codecs.open("index.html", encoding='utf-8', mode='w') as f:

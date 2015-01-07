@@ -12,18 +12,16 @@ from bs4 import BeautifulSoup, UnicodeDammit
 from os import path
 from dateutil.parser import parse
 
-ARCHIVEFILES = ["/home/sumanah/Documents/mcm-archive/leftovers/2005-05-26.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2005-07-28.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2005-08-04.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2005-08-18.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2005-10-09.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2005-11-06.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2005-11-20.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2006-09-10.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2007-05-20.html", 
-"/home/sumanah/Documents/mcm-archive/leftovers/2007-06-10.html",
-"../../Documents/mcm-archive/all-articles.htm"]
-
+ARCHIVEFILES = ["/home/sumanah/Documents/mcm-archive/leftovers/2005-05-26.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2005-07-28.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2005-08-04.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2005-08-18.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2005-10-09.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2005-11-06.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2005-11-20.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2006-09-10.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2007-05-20.html",
+"/home/sumanah/Documents/mcm-archive/leftovers/2007-06-10.html", "../../Documents/mcm-archive/all-articles.htm"]
 
 
 def parse_archival_article(element):
@@ -32,7 +30,7 @@ def parse_archival_article(element):
     This function uses Beautiful Soup to parse it for headline/body/date.'''
 
     article_data = {}
-    article_data["headline"] = element.find("div", id = "hd").text.strip("\n").rstrip()
+    article_data["headline"] = element.find("div", id="hd").text.strip("\n").rstrip()
     trib = element.find("div", text=re.compile("The Oakland Tribune"))
     article_data["date"] = trib.previous_element
     article_text = ""
@@ -46,7 +44,7 @@ def parse_archival_article(element):
         article_text = article_text.rpartition("<p>Document OKLD")[0]
         article_data["body"] = article_text
     else:
-        print(article_data["headline"]+" has no rightstag")
+        print(article_data["headline"] + " has no rightstag")
 
     return article_data
 
@@ -59,11 +57,12 @@ def parse_leftover_article(soup):
     postdate = soup.find("meta", attrs={"property": "pubDate"})["content"]
     article_data["date"] = repr(postdate)[1:11]  # slicing the date, not time
     article_data["headline"] = soup.find("meta", attrs={"property": "twitter:title"})["content"]
-    body = soup.find("div", id = "articleViewerGroup").previous_element.contents
+    body = soup.find("div", id="articleViewerGroup").previous_element.contents
     prose = "<p>"
-    for para in body[3:]:  # Bunch of useless scripts in the first few elements
+    important_body_elements = body[3:]  # Bunch of useless scripts in the first few elements
+    for para in important_body_elements:
         prose += repr(para).strip()
-    article_data["body"] = prose.replace("\\n","").rpartition('<span fd-id="default" fd-type="end"></span>')[0]
+    article_data["body"] = prose.replace("\\n", "").rpartition('<span fd-id="default" fd-type="end"></span>')[0]
     return article_data
 
 
@@ -84,7 +83,7 @@ def parse_files(filenames, article_list):
         archival_articles = soup.find_all("div", attrs={"class": "article"})
 
         for article in archival_articles:
-            headline = article.find("div", id = "hd").text.strip("\n").rstrip()
+            headline = article.find("div", id="hd").text.strip("\n").rstrip()
             if is_unique(headline, article_list):
                 article_list.append(parse_archival_article(article))
         if archival_articles == []:
@@ -93,7 +92,7 @@ def parse_files(filenames, article_list):
                 article_list.append(parse_leftover_article(soup))
 
     article_list.sort(key=lambda k: parse(k["date"]))
-    index = [{k:v for (k,v) in story.items() if ("date" in k) or ("headline" in k)} for story in article_list]
+    index = [{k: v for (k, v) in story.items() if ("date" in k) or ("headline" in k)} for story in article_list]
     return (article_list, index)
 
 

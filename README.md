@@ -28,6 +28,8 @@ Run:
 
 Between April 2005 and August 2007, I [wrote a weekly column called "MC Masala"](http://www.harihareswara.net/sumana/2011/02/23/0) for the "Inside Bay Area" section of several papers in the San Francisco Bay Area, including the Oakland Tribune. My work circulated to about a million people, I'm told. In 2011 I made [an abortive attempt](http://www.harihareswara.net/masala) to get the columns online but wasn't a strong programmer and thus gave up on all the fiddly bits. Then, while at [the Recurse Center](http://recurse.com/), I figured this would be a fun and useful way to learn Beautiful Soup and learn to finagle a search engine. I [wrote up a more detailed making-of](http://www.harihareswara.net/sumana/2014/11/18/2).
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 ## To-do
 * improve de-duplication (checking dates and headlines)
 * fix Unicode-type character issues
